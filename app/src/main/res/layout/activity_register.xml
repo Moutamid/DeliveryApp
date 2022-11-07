@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="@color/naranja2"
+    tools:context=".RegisterActivity">
+
+
+    <ImageView
+        android:layout_width="340dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
+        android:background="@drawable/grubene"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <EditText
+            android:layout_width="285dp"
+            android:layout_height="42dp"
+            android:hint="Nombre de Usuario"
+            android:background="@drawable/edittext_background"
+            android:layout_marginTop="15dp"
+            android:id="@+id/username"
+            android:textColor="@color/Blaki"
+            android:textColorHint="@color/GRIS"
+
+            android:padding="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/Blaki"
+            android:layout_marginStart="3dp"
+            android:layout_gravity="bottom">
+
+
+
+            <Button
+                android:layout_width="93dp"
+                android:textSize="10dp"
+                android:layout_gravity="center"
+                android:text="Talleres!"
+                android:id="@+id/alerta"
+                android:textColor="@color/beige"
+                android:layout_height="41dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:hint="Ciudad, Estado"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/GRIS"
+        android:textColor="@color/Blaki"
+        android:layout_marginTop="5dp"
+        android:id="@+id/fullname"
+        android:padding="10dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edad"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edittext_background"
+            android:textColorHint="@color/GRIS"
+            android:textColor="@color/Blaki"
+            android:id="@+id/edad"
+            android:padding="10dp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edittext_background"
+            android:textColorHint="@color/GRIS"
+            android:textColor="@color/Blaki"
+            android:id="@+id/sexo"
+            android:hint="Sexo"
+            android:padding="10dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:hint="Gmail"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/GRIS"
+        android:textColor="@color/Blaki"
+        android:inputType="textEmailAddress"
+        android:id="@+id/email"
+        android:padding="10dp"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:hint="Contraseña"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/GRIS"
+        android:textColor="@color/Blaki"
+        android:layout_marginTop="5dp"
+        android:id="@+id/password"
+        android:inputType="textPassword"
+        android:padding="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/register"
+        android:text="Registrarse"
+        android:textColor="@color/veaje"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Da click aqui, para iniciar sesion"
+        android:id="@+id/txt_login"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

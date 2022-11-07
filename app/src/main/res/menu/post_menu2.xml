@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/edit1"
+        android:title="Editar auto "/>
+
+    <item android:id="@+id/edit2"
+        android:title="Editar cilindraje"/>
+
+    <item android:id="@+id/edit3"
+        android:title="Editar traccion"/>
+
+    <item android:id="@+id/edit4"
+        android:title="Editar Version"/>
+
+    <item android:id="@+id/edit5"
+        android:title="Editar telefono"/>
+
+    <item android:id="@+id/edit6"
+        android:title="Editar detalles"/>
+
+    <item android:id="@+id/delete"
+        android:title="Eliminar"/>
+
+    <item android:id="@+id/report"
+        android:title="ReportAR"/>
+
+</menu>

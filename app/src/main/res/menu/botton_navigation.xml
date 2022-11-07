@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_home"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="" />
+
+    <item
+        android:id="@+id/nav_search"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_group_add_24"
+        android:title=""/>
+
+    <item
+        android:id="@+id/nav_add"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_b_add_24"
+        android:title=""/>
+
+    <item
+        android:id="@+id/nav_heart"
+        android:icon="@drawable/ic_heart_24"
+        app:showAsAction="ifRoom"
+        android:title=""/>
+
+    <item
+        android:id="@+id/nav_profile"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_perfil_24"
+        android:title="" />
+
+
+</menu>

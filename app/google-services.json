@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "244500320343",
+    "project_id": "grubenl",
+    "storage_bucket": "grubenl.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244500320343:android:9333de6bb612a9e9641312",
+        "android_client_info": {
+          "package_name": "nuleo.autopart.grube"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244500320343-nqon28q3b94af34n4g6a5ocsentebu1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKDLa8EJUTPHWJc1RKSsJacr6k1JSDAYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244500320343-nqon28q3b94af34n4g6a5ocsentebu1m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

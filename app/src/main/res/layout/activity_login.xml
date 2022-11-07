@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="@color/naranja2"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:layout_width="340dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
+        android:background="@drawable/grubene"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/edittext_background"
+        android:hint="Gmail"
+        android:textColorHint="@color/GRIS"
+        android:layout_marginTop="15dp"
+        android:inputType="textEmailAddress"
+        android:id="@+id/email1"
+        android:padding="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/edittext_background"
+        android:hint="Contraseña"
+        android:textColorHint="@color/GRIS"
+        android:layout_marginTop="15dp"
+        android:id="@+id/Password1"
+        android:inputType="textPassword"
+        android:padding="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login"
+        android:text="Ingresar"
+        android:textColor="@color/beige"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Da click aqui, para registrarse en GRUBE."
+        android:id="@+id/txt_signup1"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

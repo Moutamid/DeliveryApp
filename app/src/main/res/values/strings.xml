@@ -2,4 +2,7 @@
     <string name="app_name">GRUBE</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_channel_id">default_channel_id</string>
+    <string name="general_announcements">General announcements</string>
+    <string name="default_notification_channel_id">Channel ID</string>
 </resources>

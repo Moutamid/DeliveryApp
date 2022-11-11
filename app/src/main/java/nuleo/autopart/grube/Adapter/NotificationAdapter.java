@@ -64,10 +64,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         }else{
             holder.post_image.setVisibility(View.GONE);
-
-
-
-
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -89,9 +85,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                     ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new PostDetaillFragment()).addToBackStack(null).commit();
-
-
-
 
                 }
             }

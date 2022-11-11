@@ -16,6 +16,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GRUBE">
 
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_channel_id"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/button_black"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/Amarillo" />
+
         <activity android:name=".OpcionesActivity"></activity>
         <activity android:name=".OptionsActivity" />
         <activity android:name=".RegisterActivity" />
@@ -27,7 +45,14 @@
         <activity android:name=".CometActivity" />
         <activity android:name=".ComActivity" />
         <activity android:name=".AddStoryActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name=".MainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

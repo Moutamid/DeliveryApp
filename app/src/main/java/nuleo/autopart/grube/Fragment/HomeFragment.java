@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progress_circular);
 
-        checkFollowing();
+       checkFollowing();
 
 
 

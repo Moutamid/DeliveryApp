@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.IntentService;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
@@ -26,11 +27,17 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 import nuleo.autopart.grube.Fragment.HomeFragment;
 import nuleo.autopart.grube.Fragment.NotificationFragment;
 import nuleo.autopart.grube.Fragment.ProfileFragment;
 import nuleo.autopart.grube.Fragment.SearchFragment;
+import nuleo.autopart.grube.Service.ListenNotification;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab, fab1, fab2,fab3, fab4, fab5;
     boolean isOpen = false ;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Intent i = getIntent();
+
         Bundle extras = i.getExtras();
         if (extras != null) {
             for (String key : extras.keySet()) {
@@ -95,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFab();
-
+                addNotifications();
             }
         });
 
@@ -155,12 +162,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
         bottomNavigationView = findViewById(R.id.botton_navigationn);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
@@ -179,9 +180,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
         }
-
-
-
+        startService(new Intent(MainActivity.this, ListenNotification.class));
     }
 
     private void animateFab() {
@@ -256,6 +255,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+    private void addNotifications () {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications")
+                .child(user.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", user.getUid());
+        hashMap.put("text", "Comento: " + "Hello");
+        hashMap.put("postid", "12345");
+        hashMap.put("ispost", true);
+
+        reference.push().setValue(hashMap);
+    }
     @Override
     public void onNewIntent(Intent intent){
         //called when a new intent for this class is created.

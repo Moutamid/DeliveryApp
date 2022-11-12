@@ -119,7 +119,8 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void addNotifications () {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(publisherid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications")
+                .child(publisherid);
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userid", firebaseUser.getUid());

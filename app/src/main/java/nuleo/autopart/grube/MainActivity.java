@@ -48,14 +48,18 @@ public class MainActivity extends AppCompatActivity {
     Animation fabOpen, fabClose, rotateForware, rotateBackward;
     FloatingActionButton fab, fab1, fab2,fab3, fab4, fab5;
     boolean isOpen = false ;
+    private String postId  = "";
+   // private boolean status;
+    private SharedPreferencesManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        manager = new SharedPreferencesManager(MainActivity.this);
+     //   status = manager.retrieveBoolean("status",false);
         Intent i = getIntent();
-
         Bundle extras = i.getExtras();
         if (extras != null) {
             for (String key : extras.keySet()) {
@@ -102,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animateFab();
-                addNotifications();
+              //  addNotifications();
             }
         });
 
@@ -180,7 +184,13 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
         }
-        startService(new Intent(MainActivity.this, ListenNotification.class));
+        postId = getIntent().getStringExtra("status");
+        if (getIntent().getStringExtra("status") == null){
+            startService(new Intent(MainActivity.this, ListenNotification.class));
+        }else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).commit();
+        }
     }
 
     private void animateFab() {

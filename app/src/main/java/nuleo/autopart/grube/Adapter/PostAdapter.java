@@ -227,8 +227,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
 
-
-
                 if (holder.like.getTag().equals("like")) {
                     FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostid())
                             .child(firebaseUser.getUid()).setValue(true);
@@ -392,7 +390,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
 
     private void getComments(final String postid, final TextView comments) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Comments").child(postid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Comments")
+                .child(postid);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -435,7 +434,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private void addNotifications(String userid, String postid) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications")
+                .child(userid);
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userid", firebaseUser.getUid());

@@ -10,13 +10,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,15 +31,22 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import nuleo.autopart.grube.MainActivity;
+import nuleo.autopart.grube.Model.Comment;
+import nuleo.autopart.grube.PostActivity;
 import nuleo.autopart.grube.R;
+import nuleo.autopart.grube.SharedPreferencesManager;
 
-public class ListenNotification extends Service implements ChildEventListener {
-    DatabaseReference requests;
+public class ListenNotification extends Service {
+    DatabaseReference notificationDB;
+    private Uri soundUri = null;
+    private SharedPreferencesManager manager;
+    String channelId = "Channel_id";
 
     public ListenNotification() {
     }
@@ -48,38 +60,60 @@ public class ListenNotification extends Service implements ChildEventListener {
     public void onCreate() {
         super.onCreate();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        manager = new SharedPreferencesManager(ListenNotification.this);
         if (firebaseUser != null) {
-            requests = FirebaseDatabase.getInstance().getReference("Notifications").child(firebaseUser.getUid());
+            notificationDB = FirebaseDatabase.getInstance().getReference("Notifications").child(firebaseUser.getUid());
         }
      //   notificationArrayList.clear();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        requests.addChildEventListener(this);
+        notificationDB.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                nuleo.autopart.grube.Model.Notification notification =
+                        dataSnapshot.getValue(nuleo.autopart.grube.Model.Notification.class);
+                String pushKey = dataSnapshot.getKey().toString();
+                if (manager.retrieveBoolean(pushKey,false)){
+
+                }else {
+                    showNotification(notification);
+                    manager.storeBoolean(pushKey,true);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         //notificationArrayList.clear();
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-      //  for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-            nuleo.autopart.grube.Model.Notification notification =
-                    dataSnapshot.getValue(nuleo.autopart.grube.Model.Notification.class);
-        showNotification(notification);
 
-
-    }
-
-    @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-    }
     PendingIntent notifyPendingIntent;
     private void showNotification(nuleo.autopart.grube.Model.Notification info) {
+
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
 
-        //  intent.putExtra("status",true);
+        intent.putExtra("status",info.getPostid());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             notifyPendingIntent = PendingIntent.getActivity(getBaseContext(),
                     0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -88,64 +122,39 @@ public class ListenNotification extends Service implements ChildEventListener {
             notifyPendingIntent = PendingIntent.getActivity(getBaseContext(),
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        Uri soundUri = Uri.parse("android.resource://" + getBaseContext().getPackageName() + "/" +
-                R.raw.notify);
-        String channel_id = createNotificationChannel(this);
+        Uri rawPathUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notify);
+        Ringtone r = RingtoneManager.getRingtone(ListenNotification.this, rawPathUri);
+        r.play();
+        createNotificationChannel(this);
 
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channel_id)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(info.getPostid())
                 .setContentText(info.getText())
                 /*.setLargeIcon(largeIcon)*/
                 .setSmallIcon(R.mipmap.ic_launcher_round) //needs white icon with transparent BG (For all platforms)
                 .setContentIntent(notifyPendingIntent)
-                .setPriority(Notification.PRIORITY_MAX)
-                .setOngoing(true)
-                .setSound(soundUri)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setNotificationSilent()
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(( int ) System. currentTimeMillis () , notificationBuilder.build());
-        /*NotificationCompat.Builder notify = new NotificationCompat.Builder(this);
-        notify.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setTicker(info.getPostid())
-                .setContentTitle(info.getText())
-                .setPriority(Notification.PRIORITY_MAX)
-              //  .setContentText("Order # "+key+" is updated to " + Common.codeConverter(info.getStatus()))
-                .setContentIntent(notifyPendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher_round);
-
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(channel_id,
-                    "Default channel", NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        notificationManager.notify(1, notify.build());*/
 
     }
 
-    public static String createNotificationChannel(Context context) {
+    public void createNotificationChannel(Context context) {
 
         // NotificationChannels are required for Notifications on O (API 26) and above.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             // The id of the channel.
-            String channelId = "Channel_id";
-
             // The user-visible name of the channel.
             CharSequence channelName = "Grube";
             // The user-visible description of the channel.
             String channelDescription = "Grubu Alert";
-            int channelImportance = NotificationManager.IMPORTANCE_HIGH;
+            int channelImportance = NotificationManager.IMPORTANCE_DEFAULT;
             boolean channelEnableVibrate = true;
-            Uri soundUri = Uri.parse("android.resource://" + context.getPackageName() + "/" +
-                    R.raw.notify);
-//            int channelLockscreenVisibility = Notification.;
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
@@ -154,36 +163,13 @@ public class ListenNotification extends Service implements ChildEventListener {
             NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, channelImportance);
             notificationChannel.setDescription(channelDescription);
             notificationChannel.enableVibration(channelEnableVibrate);
-            notificationChannel.setSound(soundUri,audioAttributes);
-//            notificationChannel.setLockscreenVisibility(channelLockscreenVisibility);
 
-            // Adds NotificationChannel to system. Attempting to create an existing notification
-            // channel with its original values performs no operation, so it's safe to perform the
-            // below sequence.
+//            notificationChannel.setSound(soundUri, audioAttributes);
+
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel);
-
-            return channelId;
-        } else {
-            // Returns null for pre-O (26) devices.
-            return null;
         }
     }
 
-    @Override
-
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
-    }
 }

@@ -6,6 +6,7 @@ public class Notification {
     private String text;
     private String postid;
     private boolean ispost;
+    private boolean isSeen;
 
     public Notification(String userid, String text, String postid, boolean ispost) {
         this.userid = userid;
@@ -16,6 +17,14 @@ public class Notification {
 
     public Notification(){
 
+    }
+
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 
     public String getUserid() {

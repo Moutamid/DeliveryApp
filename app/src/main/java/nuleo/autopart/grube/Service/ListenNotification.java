@@ -38,6 +38,7 @@ import java.util.Date;
 
 import nuleo.autopart.grube.MainActivity;
 import nuleo.autopart.grube.Model.Comment;
+import nuleo.autopart.grube.Model.User;
 import nuleo.autopart.grube.PostActivity;
 import nuleo.autopart.grube.R;
 import nuleo.autopart.grube.SharedPreferencesManager;
@@ -76,10 +77,24 @@ public class ListenNotification extends Service {
                         dataSnapshot.getValue(nuleo.autopart.grube.Model.Notification.class);
                 String pushKey = dataSnapshot.getKey().toString();
                 if (manager.retrieveBoolean(pushKey,false)){
-
                 }else {
-                    showNotification(notification);
-                    manager.storeBoolean(pushKey,true);
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users")
+                            .child(notification.getUserid());
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                User model = snapshot.getValue(User.class);
+                                showNotification(notification,model.getFullname());
+                                manager.storeBoolean(pushKey,true);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
 
@@ -109,7 +124,7 @@ public class ListenNotification extends Service {
 
 
     PendingIntent notifyPendingIntent;
-    private void showNotification(nuleo.autopart.grube.Model.Notification info) {
+    private void showNotification(nuleo.autopart.grube.Model.Notification info, String fullname) {
 
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
 
@@ -122,6 +137,7 @@ public class ListenNotification extends Service {
             notifyPendingIntent = PendingIntent.getActivity(getBaseContext(),
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
+        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
         Uri rawPathUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notify);
         Ringtone r = RingtoneManager.getRingtone(ListenNotification.this, rawPathUri);
         r.play();
@@ -129,7 +145,7 @@ public class ListenNotification extends Service {
 
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                .setContentTitle(info.getPostid())
+                .setContentTitle(fullname)
                 .setContentText(info.getText())
                 /*.setLargeIcon(largeIcon)*/
                 .setSmallIcon(R.mipmap.ic_launcher_round) //needs white icon with transparent BG (For all platforms)
@@ -141,6 +157,26 @@ public class ListenNotification extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(( int ) System. currentTimeMillis () , notificationBuilder.build());
 
+    }
+    String username = "";
+    private String getUsername(String userid) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(userid);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    User model = snapshot.getValue(User.class);
+                    username = model.getFullname();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return username;
     }
 
     public void createNotificationChannel(Context context) {

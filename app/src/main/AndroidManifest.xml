@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:networkSecurityConfig = "@xml/seguridad_red"
@@ -31,6 +33,16 @@
             android:enabled="true"
             android:exported="true" />
 
+        <receiver
+            android:name=".Service.BootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_channel_id"/>
 
         <meta-data
@@ -52,13 +64,7 @@
         <activity android:name=".CometActivity" />
         <activity android:name=".ComActivity" />
         <activity android:name=".AddStoryActivity" />
-        <activity android:name=".MainActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name=".MainActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".MainActivity" android:exported="false">
         </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

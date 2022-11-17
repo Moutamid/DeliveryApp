@@ -148,7 +148,8 @@ public class CometActivity extends AppCompatActivity {
     }
 
     private void readComentario() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Commentss").child(commentid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().
+                getReference("Commentss").child(commentid);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override

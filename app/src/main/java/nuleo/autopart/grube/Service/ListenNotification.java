@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 
+import nuleo.autopart.grube.CommentsActivity;
 import nuleo.autopart.grube.MainActivity;
 import nuleo.autopart.grube.Model.Comment;
 import nuleo.autopart.grube.Model.User;
@@ -48,6 +49,7 @@ public class ListenNotification extends Service {
     private Uri soundUri = null;
     private SharedPreferencesManager manager;
     String channelId = "Channel_id";
+    private FirebaseUser firebaseUser;
 
     public ListenNotification() {
     }
@@ -60,7 +62,7 @@ public class ListenNotification extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         manager = new SharedPreferencesManager(ListenNotification.this);
         if (firebaseUser != null) {
             notificationDB = FirebaseDatabase.getInstance().getReference("Notifications").child(firebaseUser.getUid());
@@ -124,11 +126,18 @@ public class ListenNotification extends Service {
 
 
     PendingIntent notifyPendingIntent;
+    Intent intent;
     private void showNotification(nuleo.autopart.grube.Model.Notification info, String fullname) {
 
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        if(info.getText().contains("Comento:")){
+            intent = new Intent(getBaseContext(), CommentsActivity.class);
+            intent.putExtra("postid",info.getPostid());
+            intent.putExtra("publisherid",firebaseUser.getUid());
+        }else {
+            intent = new Intent(getBaseContext(), MainActivity.class);
+            intent.putExtra("status",info.getPostid());
+        }
 
-        intent.putExtra("status",info.getPostid());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             notifyPendingIntent = PendingIntent.getActivity(getBaseContext(),
                     0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -137,7 +146,6 @@ public class ListenNotification extends Service {
             notifyPendingIntent = PendingIntent.getActivity(getBaseContext(),
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
         Uri rawPathUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notify);
         Ringtone r = RingtoneManager.getRingtone(ListenNotification.this, rawPathUri);
         r.play();

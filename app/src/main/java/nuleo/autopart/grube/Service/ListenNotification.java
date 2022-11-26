@@ -5,20 +5,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
-import android.widget.RemoteViews;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -87,7 +81,7 @@ public class ListenNotification extends Service {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 User model = snapshot.getValue(User.class);
-                                showNotification(notification,model.getFullname());
+                                showNotification(notification,model.getUsername());
                                 manager.storeBoolean(pushKey,true);
                             }
                         }
@@ -165,26 +159,6 @@ public class ListenNotification extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(( int ) System. currentTimeMillis () , notificationBuilder.build());
 
-    }
-    String username = "";
-    private String getUsername(String userid) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users")
-                .child(userid);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    User model = snapshot.getValue(User.class);
-                    username = model.getFullname();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        return username;
     }
 
     public void createNotificationChannel(Context context) {

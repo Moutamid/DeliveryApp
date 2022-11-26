@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
@@ -120,7 +121,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.Detalles2.setText(post.getDetalles());
         }
 
-        publisherInfo(holder.image_profile, holder.username, holder.fullname, holder.publisher, post.getPublisher());
+        publisherInfo(holder.image_profile, holder.username, holder.fullname,
+                holder.publisher, post.getPublisher());
         isLikes(post.getPostid(), holder.like);
         nrLikes(holder.likes, post.getPostid());
         getComments(post.getPostid(), holder.comments);

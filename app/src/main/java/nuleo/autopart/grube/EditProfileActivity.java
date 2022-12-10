@@ -110,7 +110,6 @@ public class EditProfileActivity extends AppCompatActivity {
                         .setAspectRatio(1,1)
                         .setCropShape(CropImageView.CropShape.OVAL)
                         .start(EditProfileActivity.this);
-
             }
         });
 
